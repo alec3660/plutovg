@@ -61,7 +61,49 @@
 #define PVG_FT_BEGIN_STMNT  do {
 #define PVG_FT_END_STMNT    } while ( 0 )
 
-#include <setjmp.h>
+typedef void *jmp_buf[10];
+
+__attribute__((naked,returns_twice))
+int setjmp(jmp_buf buf)
+{
+    (void)buf;
+    __asm(
+        "mov (%rsp), %rax\n"
+        "mov %rax,  0(%rcx)\n"
+        "lea 8(%rsp), %rax\n"
+        "mov %rax,  8(%rcx)\n"
+        "mov %rbp, 16(%rcx)\n"
+        "mov %rbx, 24(%rcx)\n"
+        "mov %rdi, 32(%rcx)\n"
+        "mov %rsi, 40(%rcx)\n"
+        "mov %r12, 48(%rcx)\n"
+        "mov %r13, 56(%rcx)\n"
+        "mov %r14, 64(%rcx)\n"
+        "mov %r15, 72(%rcx)\n"
+        "xor %eax, %eax\n"
+        "ret\n"
+    );
+}
+
+__attribute__((naked,noreturn))
+void longjmp(jmp_buf buf, int ret)
+{
+    (void)buf;
+    (void)ret;
+    __asm(
+        "mov 72(%rcx), %r15\n"
+        "mov 64(%rcx), %r14\n"
+        "mov 56(%rcx), %r13\n"
+        "mov 48(%rcx), %r12\n"
+        "mov 40(%rcx), %rsi\n"
+        "mov 32(%rcx), %rdi\n"
+        "mov 24(%rcx), %rbx\n"
+        "mov 16(%rcx), %rbp\n"
+        "mov  8(%rcx), %rsp\n"
+        "mov %edx, %eax\n"
+        "jmp *0(%rcx)\n"
+    );
+}
 
 #define pvg_ft_setjmp   setjmp
 #define pvg_ft_longjmp  longjmp
