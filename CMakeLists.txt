@@ -105,7 +105,7 @@ export(EXPORT plutovgTargets
     NAMESPACE plutovg::
 )
 
-option(PLUTOVG_BUILD_EXAMPLES "Build examples" ON)
+option(PLUTOVG_BUILD_EXAMPLES "Build examples" OFF)
 if(PLUTOVG_BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
