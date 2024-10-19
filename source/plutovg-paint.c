@@ -123,6 +123,17 @@ static bool parse_alpha_component(const char** begin, const char* end, int* comp
     return true;
 }
 
+bool plutovg_isxdigit(char ch) {
+    switch (ch) {
+    case '0' ... '9':
+    case 'A' ... 'F':
+    case 'a' ... 'f':
+      return true;
+    default:
+      return false;
+    };
+}
+
 int plutovg_color_parse(plutovg_color_t* color, const char* data, int length)
 {
     if(length == -1)
@@ -133,7 +144,7 @@ int plutovg_color_parse(plutovg_color_t* color, const char* data, int length)
     if(plutovg_skip_delim(&it, end, '#')) {
         int r, g, b, a = 255;
         const char* begin = it;
-        while(it < end && isxdigit(*it))
+        while(it < end && plutovg_isxdigit(*it))
             ++it;
         int count = it - begin;
         if(count == 3 || count == 4) {
