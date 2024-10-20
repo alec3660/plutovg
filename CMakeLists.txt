@@ -4,6 +4,8 @@ set(PLUTOVG_VERSION_MAJOR 0)
 set(PLUTOVG_VERSION_MINOR 0)
 set(PLUTOVG_VERSION_MICRO 8)
 
+add_compile_options(-O0 -mno-mmx -mno-red-zone)
+
 project(plutovg LANGUAGES C VERSION ${PLUTOVG_VERSION_MAJOR}.${PLUTOVG_VERSION_MINOR}.${PLUTOVG_VERSION_MICRO})
 
 set(plutovg_sources
